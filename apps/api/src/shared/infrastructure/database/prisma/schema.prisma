@@ -1,0 +1,67 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider     = "prisma-client"
+  output       = "./generated/client"
+  moduleFormat = "esm"
+}
+
+// ─── Event module ────────────────────────────────────────────────────────────
+
+model Event {
+  id          String       @id @db.Uuid
+  name        String
+  date        DateTime     @db.Timestamptz(3)
+  location    String
+  description String       @default("")
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+  tiers       TicketTier[]
+
+  @@index([date])
+  @@map("events")
+}
+
+model TicketTier {
+  id           String        @id @db.Uuid
+  eventId      String        @map("event_id") @db.Uuid
+  name         String
+  capacity     Int
+  price        Decimal       @db.Decimal(10, 2)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+  event        Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  reservations Reservation[]
+
+  @@unique([eventId, name])
+  @@index([eventId])
+  @@map("ticket_tiers")
+}
+
+// ─── Reservation module ──────────────────────────────────────────────────────
+
+enum ReservationStatus {
+  ON_HOLD  @map("on-hold")
+  RESERVED @map("reserved")
+  EXPIRED  @map("expired")
+
+  @@map("reservation_status")
+}
+
+model Reservation {
+  id               String            @id @db.Uuid
+  ticketTierId     String            @map("ticket_tier_id") @db.Uuid
+  customerFullName String            @map("customer_full_name")
+  customerEmail    String            @map("customer_email") @db.VarChar(254)
+  ticketsQuantity  Int               @map("tickets_quantity")
+  status           ReservationStatus @default(ON_HOLD)
+  createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz(3)
+  ticketTier       TicketTier        @relation(fields: [ticketTierId], references: [id], onDelete: Restrict)
+
+  @@index([ticketTierId, status])
+  @@index([customerEmail])
+  @@map("reservations")
+}

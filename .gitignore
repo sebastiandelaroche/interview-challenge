@@ -17,3 +17,7 @@ node_modules
 .pnp.*
 
 dist
+
+.env
+
+generated
