@@ -1,0 +1,19 @@
+{
+  "name": "interview-challenge",
+  "packageManager": "yarn@4.18.1",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "resolutions": {
+    "typescript": "^6"
+  },
+  "scripts": {
+    "dev:api": "yarn workspace api dev",
+    "dev:web": "yarn workspace web-app dev",
+    "dev": "yarn workspaces foreach -Api run dev"
+  },
+  "devDependencies": {
+    "typescript": "^6"
+  }
+}
