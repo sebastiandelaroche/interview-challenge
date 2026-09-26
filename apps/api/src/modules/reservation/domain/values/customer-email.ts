@@ -9,7 +9,10 @@ export const CustomerEmail = {
   create: (raw: string) => {
     const email = nonEmpty('CustomerEmail', raw, 254).toLowerCase();
     if (!EMAIL_REGEX.test(email))
-      throw new InvalidValueException('CustomerEmail', 'must be a valid email address');
+      throw new InvalidValueException(
+        'CustomerEmail',
+        'must be a valid email address',
+      );
     return email as CustomerEmail;
   },
 };

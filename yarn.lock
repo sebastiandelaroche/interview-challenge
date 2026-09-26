@@ -3000,6 +3000,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/validator@npm:^13.15.3":
+  version: 13.15.10
+  resolution: "@types/validator@npm:13.15.10"
+  checksum: 10c0/3e2e65fcd37dd6961ca3fd0535293d0c42f5911dc3ca44b96f458835e6db2392b678ccbb0c9815d8c0a14e653439e6c62c7b8758a6cd1d6e390551c9e56618ac
+  languageName: node
+  linkType: hard
+
 "@types/yargs-parser@npm:*":
   version: 21.0.3
   resolution: "@types/yargs-parser@npm:21.0.3"
@@ -3628,6 +3635,8 @@ __metadata:
     "@types/node": "npm:^24.0.0"
     "@types/pg": "npm:^8.23.1"
     "@types/supertest": "npm:^7.0.0"
+    class-transformer: "npm:^0.5.1"
+    class-validator: "npm:^0.15.1"
     dotenv: "npm:^18.0.3"
     jest: "npm:^30.0.0"
     oxlint: "npm:^1.58.0"
@@ -4096,6 +4105,24 @@ __metadata:
   version: 2.2.1
   resolution: "cjs-module-lexer@npm:2.2.1"
   checksum: 10c0/889777eb1e32c4662bf3744fdf09aca444a3f9373d70a8c3d2a575e845e415988912a70a7b5e3c2bf943c7547d930dff641c4e0ff2ee2110ba1daca05b2310cd
+  languageName: node
+  linkType: hard
+
+"class-transformer@npm:^0.5.1":
+  version: 0.5.1
+  resolution: "class-transformer@npm:0.5.1"
+  checksum: 10c0/19809914e51c6db42c036166839906420bb60367df14e15f49c45c8c1231bf25ae661ebe94736ee29cc688b77101ef851a8acca299375cc52fc141b64acde18a
+  languageName: node
+  linkType: hard
+
+"class-validator@npm:^0.15.1":
+  version: 0.15.1
+  resolution: "class-validator@npm:0.15.1"
+  dependencies:
+    "@types/validator": "npm:^13.15.3"
+    libphonenumber-js: "npm:^1.11.1"
+    validator: "npm:^13.15.22"
+  checksum: 10c0/bc030e0118d79a5fc2d053dfd4c7475092dd159222eafe946c2b01d7ff22a0a8075c8713a96239a3db536ff2a18e18d791c3a6bfabd66dbac077f7d3fd950402
   languageName: node
   linkType: hard
 
@@ -6558,6 +6585,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"libphonenumber-js@npm:^1.11.1":
+  version: 1.13.14
+  resolution: "libphonenumber-js@npm:1.13.14"
+  checksum: 10c0/262100ad46f9507bf4087f6a00241eb628c1427d0b26b24442e3e39df61ffd2d42e9c65bfc35200c9e204b2e9b5d2b696e506022113d0e9b659a8c3fed096b2e
+  languageName: node
+  linkType: hard
+
 "lightningcss-android-arm64@npm:1.33.0":
   version: 1.33.0
   resolution: "lightningcss-android-arm64@npm:1.33.0"
@@ -8988,6 +9022,13 @@ __metadata:
     typescript:
       optional: true
   checksum: 10c0/71b861de928fd5533b03fc4d84c619c07602f176d2bc6b12c5c80b2a6e889574c4126c843dd0771ce450bbb29566ca6df13d5b538ce5e4c39c2fccfb7623cf4e
+  languageName: node
+  linkType: hard
+
+"validator@npm:^13.15.22":
+  version: 13.15.35
+  resolution: "validator@npm:13.15.35"
+  checksum: 10c0/1958ebcad578128d154853a2b9bf5b95e7738dcc7d1d065e50a969812272312ec379dcaf375b9d7545e04a71de6755f60f5a4b49c1405737a9c80e11da297eef
   languageName: node
   linkType: hard
 

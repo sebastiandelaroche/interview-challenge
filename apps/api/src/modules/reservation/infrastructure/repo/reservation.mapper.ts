@@ -13,14 +13,20 @@ import { $Enums, Prisma } from '@shared/infrastructure/database';
 type PrismaReservationStatus = $Enums.ReservationStatus;
 
 // Keyed by exact status unions so a missing or misspelled status fails to compile.
-const TO_PRISMA_STATUS: Record<ReservationStatusValue, PrismaReservationStatus> = {
+const TO_PRISMA_STATUS: Record<
+  ReservationStatusValue,
+  PrismaReservationStatus
+> = {
   'on-hold': 'ON_HOLD',
   confirmed: 'CONFIRMED',
   expired: 'EXPIRED',
   cancelled: 'CANCELLED',
 };
 
-const TO_DOMAIN_STATUS: Record<PrismaReservationStatus, ReservationStatusValue> = {
+const TO_DOMAIN_STATUS: Record<
+  PrismaReservationStatus,
+  ReservationStatusValue
+> = {
   ON_HOLD: 'on-hold',
   CONFIRMED: 'confirmed',
   EXPIRED: 'expired',

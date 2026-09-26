@@ -1,4 +1,5 @@
 import { AggregateRoot, DomainRuleException } from '@shared/domain';
+import { ReservationExpiredException } from './reservation.exceptions';
 import {
   CustomerEmail,
   CustomerFullName,
@@ -62,8 +63,7 @@ export class Reservation extends AggregateRoot<ReservationId> {
       throw new DomainRuleException('Reservation is already confirmed');
     if (this.status === 'cancelled')
       throw new DomainRuleException('Reservation is cancelled');
-    if (this.isExpired(now))
-      throw new DomainRuleException('Reservation has expired');
+    if (this.isExpired(now)) throw new ReservationExpiredException();
 
     this.status = ReservationStatus.create('confirmed');
     this.updatedAt = now;

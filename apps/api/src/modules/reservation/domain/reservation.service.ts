@@ -1,4 +1,4 @@
-import { DomainRuleException } from '@shared/domain';
+import { InsufficientTicketsException } from './reservation.exceptions';
 import { TicketsQuantity } from './values';
 
 export class ReservationService {
@@ -9,8 +9,6 @@ export class ReservationService {
   ): void {
     const available = Math.max(capacity - taken, 0);
     if (requested > available)
-      throw new DomainRuleException(
-        `Not enough tickets available: requested ${requested}, available ${available}`,
-      );
+      throw new InsufficientTicketsException(requested, available);
   }
 }
