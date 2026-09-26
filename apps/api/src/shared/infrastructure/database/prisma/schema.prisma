@@ -43,9 +43,10 @@ model TicketTier {
 // ─── Reservation module ──────────────────────────────────────────────────────
 
 enum ReservationStatus {
-  ON_HOLD  @map("on-hold")
-  RESERVED @map("reserved")
-  EXPIRED  @map("expired")
+  ON_HOLD   @map("on-hold")
+  CONFIRMED @map("confirmed")
+  EXPIRED   @map("expired")
+  CANCELLED @map("cancelled")
 
   @@map("reservation_status")
 }

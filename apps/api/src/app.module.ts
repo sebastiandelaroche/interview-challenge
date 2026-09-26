@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { allConfigs } from '@shared/infrastructure/config';
+import { ClockModule } from '@shared/infrastructure/clock';
 import { DatabaseModule } from '@shared/infrastructure/database';
 
 @Module({
@@ -10,6 +11,7 @@ import { DatabaseModule } from '@shared/infrastructure/database';
       load: [...allConfigs],
     }),
     DatabaseModule,
+    ClockModule,
   ],
 })
 export class AppModule {}

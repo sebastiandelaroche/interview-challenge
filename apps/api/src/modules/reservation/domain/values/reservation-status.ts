@@ -1,9 +1,16 @@
 import { Brand, InvalidValueException } from '@shared/domain';
 
-export const RESERVATION_STATUSES = ['on-hold', 'reserved', 'expired'] as const;
+export const RESERVATION_STATUSES = [
+  'on-hold',
+  'confirmed',
+  'expired',
+  'cancelled',
+] as const;
+
+export type ReservationStatusValue = (typeof RESERVATION_STATUSES)[number];
 
 export type ReservationStatus = Brand<
-  (typeof RESERVATION_STATUSES)[number],
+  ReservationStatusValue,
   'ReservationStatus'
 >;
 

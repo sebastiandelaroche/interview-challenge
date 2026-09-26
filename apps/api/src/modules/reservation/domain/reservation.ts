@@ -1,4 +1,4 @@
-import { AggregateRoot } from '@shared/domain';
+import { AggregateRoot, DomainRuleException } from '@shared/domain';
 import {
   CustomerEmail,
   CustomerFullName,
@@ -14,6 +14,7 @@ type CreateReservation = {
   ticketTierId: TicketTierId;
   ticketsQuantity: TicketsQuantity;
   status?: ReservationStatus;
+  now: Date;
 };
 
 type HydrateReservation = {
@@ -28,6 +29,8 @@ type HydrateReservation = {
 };
 
 export class Reservation extends AggregateRoot<ReservationId> {
+  static readonly HOLD_MINUTES = 10;
+
   private constructor(
     id: ReservationId,
     public customerFullName: CustomerFullName,
@@ -41,8 +44,48 @@ export class Reservation extends AggregateRoot<ReservationId> {
     super(id);
   }
 
+  get expiresAt(): Date {
+    return new Date(
+      this.createdAt.getTime() + Reservation.HOLD_MINUTES * 60_000,
+    );
+  }
+
+  isExpired(now: Date): boolean {
+    return (
+      this.status === 'expired' ||
+      (this.status === 'on-hold' && now >= this.expiresAt)
+    );
+  }
+
+  confirm(now: Date): void {
+    if (this.status === 'confirmed')
+      throw new DomainRuleException('Reservation is already confirmed');
+    if (this.status === 'cancelled')
+      throw new DomainRuleException('Reservation is cancelled');
+    if (this.isExpired(now))
+      throw new DomainRuleException('Reservation has expired');
+
+    this.status = ReservationStatus.create('confirmed');
+    this.updatedAt = now;
+    this.record({ type: 'ReservationConfirmed', occurredAt: now });
+  }
+
+  // Only an active (non-expired) hold can be cancelled.
+  cancel(now: Date): void {
+    if (this.status === 'confirmed')
+      throw new DomainRuleException('Reservation is already confirmed');
+    if (this.status === 'cancelled')
+      throw new DomainRuleException('Reservation is already cancelled');
+    if (this.isExpired(now))
+      throw new DomainRuleException('Reservation has expired');
+
+    this.status = ReservationStatus.create('cancelled');
+    this.updatedAt = now;
+    this.record({ type: 'ReservationCancelled', occurredAt: now });
+  }
+
   static create(input: CreateReservation): Reservation {
-    const now = new Date();
+    const { now } = input;
     const reservation = new Reservation(
       ReservationId.generate(),
       input.customerFullName,
