@@ -20,8 +20,8 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "paths": {
-      "@shared/*": ["src/shared/*"],
-      "@modules/*": ["src/modules/*"]
+      "@shared/*": ["./src/shared/*"],
+      "@modules/*": ["./src/modules/*"]
     }
   }
 }
