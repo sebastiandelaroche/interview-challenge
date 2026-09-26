@@ -21,3 +21,8 @@ dist
 .env
 
 generated
+
+
+
+# TypeScript incremental build info
+*.tsbuildinfo
