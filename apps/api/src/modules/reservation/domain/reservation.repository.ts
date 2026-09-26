@@ -8,6 +8,12 @@ export interface LockedTierReservations {
   save(reservation: Reservation): Promise<void>;
 }
 
+// A reservation read under a row lock; save runs in the lock's transaction.
+export interface LockedReservation {
+  reservation: Reservation | null;
+  save(reservation: Reservation): Promise<void>;
+}
+
 export abstract class ReservationRepository {
   abstract findById(id: ReservationId): Promise<Reservation | null>;
   abstract save(reservation: Reservation): Promise<void>;
@@ -15,5 +21,10 @@ export abstract class ReservationRepository {
   abstract withTicketTierLock<T>(
     ticketTierId: TicketTierId,
     work: (locked: LockedTierReservations) => Promise<T>,
+  ): Promise<T>;
+  // Serializes concurrent changes to the same reservation; if work throws, the transaction rolls back.
+  abstract withReservationLock<T>(
+    id: ReservationId,
+    work: (locked: LockedReservation) => Promise<T>,
   ): Promise<T>;
 }

@@ -18,3 +18,17 @@ export class InsufficientTicketsException extends DomainRuleException {
     this.name = 'InsufficientTicketsException';
   }
 }
+
+export class ReservationAlreadyConfirmedException extends DomainRuleException {
+  constructor() {
+    super('Reservation is already confirmed');
+    this.name = 'ReservationAlreadyConfirmedException';
+  }
+}
+
+export class ReservationCancelledException extends DomainRuleException {
+  constructor() {
+    super('Reservation is cancelled');
+    this.name = 'ReservationCancelledException';
+  }
+}

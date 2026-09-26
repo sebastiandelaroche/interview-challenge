@@ -1,19 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import {
+  LockedReservation,
   LockedTierReservations,
   Reservation,
   ReservationId,
   ReservationRepository,
   TicketTierId,
 } from '@modules/reservation/domain';
-import { Prisma, PrismaService } from '@shared/infrastructure/database';
+import { Prisma, PostgresService } from '@shared/infrastructure/database';
 import { ReservationMapper } from './reservation.mapper';
 
-type Db = PrismaService | Prisma.TransactionClient;
+type Db = PostgresService | Prisma.TransactionClient;
 
 @Injectable()
 export class PostgresReservationImplRepo implements ReservationRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PostgresService) {}
 
   async findById(id: ReservationId): Promise<Reservation | null> {
     const row = await this.prisma.reservation.findUnique({ where: { id } });
@@ -34,6 +35,21 @@ export class PostgresReservationImplRepo implements ReservationRepository {
 
       return work({
         sumTakenTickets: (now) => this.sumTakenTickets(tx, ticketTierId, now),
+        save: (reservation) => this.upsert(tx, reservation),
+      });
+    });
+  }
+
+  withReservationLock<T>(
+    id: ReservationId,
+    work: (locked: LockedReservation) => Promise<T>,
+  ): Promise<T> {
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM reservations WHERE id = ${id}::uuid FOR UPDATE`;
+      const row = await tx.reservation.findUnique({ where: { id } });
+
+      return work({
+        reservation: row ? ReservationMapper.toDomain(row) : null,
         save: (reservation) => this.upsert(tx, reservation),
       });
     });

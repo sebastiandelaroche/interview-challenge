@@ -5,13 +5,13 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from './prisma/generated/client/client';
 
 @Injectable()
-export class PrismaService
+export class PostgresService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
   constructor(configService: ConfigService) {
     const pool = new Pool({
-      connectionString: configService.get<string>('database.url'),
+      connectionString: configService.get<string>('database.postgres.url'),
     });
     const adapter = new PrismaPg(pool);
     super({ adapter });

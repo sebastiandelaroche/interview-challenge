@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Reservation } from '@modules/reservation/domain';
-import { Prisma, PrismaService } from '@shared/infrastructure/database';
+import { Prisma, PostgresService } from '@shared/infrastructure/database';
 import { EventReadModel, EventView } from '../../application/read-models';
 
 type Row = {
@@ -18,7 +18,7 @@ type Row = {
 
 @Injectable()
 export class PrismaEventReadModel implements EventReadModel {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PostgresService) {}
 
   async findAll(now: Date): Promise<EventView[]> {
     return this.toViews(await this.query(now, Prisma.empty));

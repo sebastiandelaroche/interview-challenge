@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { EventModule } from '@modules/event/event.module';
-import { ReservationRepository } from './domain';
+import { OrderRepository, ReservationRepository } from './domain';
+import { MongoOrderImplRepo } from './infrastructure/repo/mongo-order-impl.repo';
 import { PostgresReservationImplRepo } from './infrastructure/repo/postgres-reservation-impl.repo';
 import { ReservationController } from './presentation/http/reservation.controller';
 import { reservationExceptionMappings } from './presentation/http/reservation.exception-mappings';
@@ -16,6 +17,7 @@ import {
   controllers: [ReservationController],
   providers: [
     { provide: ReservationRepository, useClass: PostgresReservationImplRepo },
+    { provide: OrderRepository, useClass: MongoOrderImplRepo },
     CreateReservationUseCase,
     ConfirmReservationUseCase,
     CancelReservationUseCase,

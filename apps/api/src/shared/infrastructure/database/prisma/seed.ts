@@ -56,7 +56,7 @@ const events = [
 ];
 
 async function main() {
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  const pool = new Pool({ connectionString: process.env.POSTGRES_URL });
   const prisma = new PrismaClient({ adapter: new PrismaPg(pool) });
 
   try {

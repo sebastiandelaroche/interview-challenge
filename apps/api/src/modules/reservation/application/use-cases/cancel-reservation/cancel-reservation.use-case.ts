@@ -16,12 +16,17 @@ export class CancelReservationUseCase implements UseCase<CancelReservationInput>
   async execute(input: CancelReservationInput): Promise<void> {
     const reservationId = ReservationId.from(input.reservationId);
 
-    const reservation =
-      await this.reservationRepository.findById(reservationId);
-    if (!reservation) throw new NotFoundException('Reservation', reservationId);
+    await this.reservationRepository.withReservationLock(
+      reservationId,
+      async (locked) => {
+        const { reservation } = locked;
+        if (!reservation)
+          throw new NotFoundException('Reservation', reservationId);
 
-    // Throws if the reservation is confirmed, expired or already cancelled.
-    reservation.cancel(await this.clock.now());
-    await this.reservationRepository.save(reservation);
+        // Throws if the reservation is confirmed, expired or already cancelled.
+        reservation.cancel(await this.clock.now());
+        await locked.save(reservation);
+      },
+    );
   }
 }

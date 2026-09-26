@@ -58,7 +58,7 @@ export class ReservationResponse {
 }
 
 export class OrderResponse {
-  @ApiProperty({ format: 'uuid' })
+  @ApiProperty({ example: '6ab81393768c89951728efc4' })
   id: string;
 
   @ApiProperty({ format: 'uuid' })

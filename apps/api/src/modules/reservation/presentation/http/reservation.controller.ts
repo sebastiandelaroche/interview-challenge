@@ -4,12 +4,16 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
-  NotImplementedException,
   Param,
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  CancelReservationUseCase,
+  ConfirmReservationUseCase,
+  CreateReservationUseCase,
+} from '../../application/use-cases';
 import { CreateReservationRequest } from './dto/create-reservation.request';
 import {
   CancelReservationResponse,
@@ -21,7 +25,11 @@ import {
 @ApiTags('reservations')
 @Controller('reservations')
 export class ReservationController {
-  constructor() {}
+  constructor(
+    private readonly createReservation: CreateReservationUseCase,
+    private readonly confirmReservation: ConfirmReservationUseCase,
+    private readonly cancelReservation: CancelReservationUseCase,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a temporary hold on tickets' })
@@ -40,8 +48,7 @@ export class ReservationController {
     type: InsufficientAvailabilityResponse,
   })
   create(@Body() body: CreateReservationRequest): Promise<ReservationResponse> {
-    void body;
-    throw new NotImplementedException();
+    return this.createReservation.execute(body);
   }
 
   @Post(':id/confirm')
@@ -58,11 +65,10 @@ export class ReservationController {
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'Reservation already confirmed',
+    description: 'Reservation already confirmed or cancelled',
   })
   confirm(@Param('id', ParseUUIDPipe) id: string): Promise<OrderResponse> {
-    void id;
-    throw new NotImplementedException();
+    return this.confirmReservation.execute({ reservationId: id });
   }
 
   @Delete(':id')
@@ -76,10 +82,10 @@ export class ReservationController {
     status: HttpStatus.CONFLICT,
     description: 'Reservation already confirmed or expired',
   })
-  cancel(
+  async cancel(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<CancelReservationResponse> {
-    void id;
-    throw new NotImplementedException();
+    await this.cancelReservation.execute({ reservationId: id });
+    return { message: 'Reservation cancelled successfully' };
   }
 }

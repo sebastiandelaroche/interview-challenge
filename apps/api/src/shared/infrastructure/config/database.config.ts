@@ -1,5 +1,10 @@
 import { registerAs } from '@nestjs/config';
 
 export const databaseConfig = registerAs('database', () => ({
-  url: process.env.DATABASE_URL,
+  postgres: {
+    url: process.env.POSTGRES_URL,
+  },
+  mongo: {
+    url: process.env.MONGO_URL,
+  },
 }));

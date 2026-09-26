@@ -1,4 +1,4 @@
-import { Reservation } from '@modules/reservation/domain';
+import { Order, ReservationStatus } from '@modules/reservation/domain';
 
 export type ConfirmReservationInput = {
   reservationId: string;
@@ -6,30 +6,49 @@ export type ConfirmReservationInput = {
 
 export type ConfirmReservationOutput = {
   id: string;
-  ticketTierId: string;
+  reservationId: string;
+  event: {
+    id: string;
+    name: string;
+  };
+  tier: {
+    id: string;
+    name: string;
+    unitPrice: number;
+  };
   ticketsQuantity: number;
+  totalPrice: number;
   customer: {
     fullName: string;
     email: string;
   };
   status: string;
   createdAt: Date;
-  updatedAt: Date;
 };
 
 export const toConfirmReservationOutput = (
-  reservation: Reservation,
+  order: Order,
+  status: ReservationStatus,
 ): ConfirmReservationOutput => {
   return {
-    id: reservation.id,
-    ticketTierId: reservation.ticketTierId,
-    ticketsQuantity: reservation.ticketsQuantity,
-    customer: {
-      fullName: reservation.customerFullName,
-      email: reservation.customerEmail,
+    id: order.id,
+    reservationId: order.reservationId,
+    event: {
+      id: order.eventId,
+      name: order.eventName,
     },
-    status: reservation.status,
-    createdAt: reservation.createdAt,
-    updatedAt: reservation.updatedAt,
+    tier: {
+      id: order.ticketTierId,
+      name: order.ticketTierName,
+      unitPrice: order.ticketUnitPrice,
+    },
+    ticketsQuantity: order.ticketsQuantity,
+    totalPrice: order.totalPaid,
+    customer: {
+      fullName: order.customerName,
+      email: order.customerEmail,
+    },
+    status,
+    createdAt: order.createdAt,
   };
 };
