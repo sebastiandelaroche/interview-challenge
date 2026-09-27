@@ -9,12 +9,15 @@ export class PostgresService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
+  private readonly pool: Pool;
+
   constructor(configService: ConfigService) {
     const pool = new Pool({
       connectionString: configService.get<string>('database.postgres.url'),
     });
     const adapter = new PrismaPg(pool);
     super({ adapter });
+    this.pool = pool;
   }
 
   async onModuleInit() {
@@ -23,5 +26,7 @@ export class PostgresService
 
   async onModuleDestroy() {
     await this.$disconnect();
+    // The pool is ours (passed to the adapter), so $disconnect doesn't close it.
+    await this.pool.end();
   }
 }

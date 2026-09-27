@@ -26,3 +26,6 @@ generated
 
 # TypeScript incremental build info
 *.tsbuildinfo
+
+
+coverage

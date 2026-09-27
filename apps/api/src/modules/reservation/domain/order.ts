@@ -66,8 +66,7 @@ export class Order extends AggregateRoot<OrderId> {
       input.ticketTierName,
       input.ticketsQuantity,
       input.ticketUnitPrice,
-      // Round to cents to avoid floating point drift (e.g. 3 * 19.99).
-      Math.round(input.ticketUnitPrice * input.ticketsQuantity * 100) / 100,
+      TicketTierPrice.total(input.ticketUnitPrice, input.ticketsQuantity),
       input.customerName,
       input.customerEmail,
       input.reservationId,

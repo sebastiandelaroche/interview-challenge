@@ -1,4 +1,4 @@
-import { Event, TicketTier } from '@modules/event/domain';
+import { Event, TicketTier, TicketTierPrice } from '@modules/event/domain';
 import { Reservation } from '@modules/reservation/domain';
 import { ReservationView } from '../../read-models';
 
@@ -29,8 +29,7 @@ export const toCreateReservationOutput = (
       unitPrice: tier.price,
     },
     ticketsQuantity: reservation.ticketsQuantity,
-    totalPrice:
-      Math.round(tier.price * reservation.ticketsQuantity * 100) / 100,
+    totalPrice: TicketTierPrice.total(tier.price, reservation.ticketsQuantity),
     customer: {
       fullName: reservation.customerFullName,
       email: reservation.customerEmail,

@@ -1,4 +1,5 @@
 import { Prisma } from '@shared/infrastructure/database';
+import { TicketTierPrice } from '@modules/event/domain';
 import { ReservationStatusValue } from '../../domain/values';
 import { ReservationView } from '../../application/read-models';
 
@@ -23,7 +24,7 @@ export const ReservationViewMapper = {
     return {
       id: row.id,
       ticketsQuantity: row.tickets_quantity,
-      totalPrice: Math.round(unitPrice * row.tickets_quantity * 100) / 100,
+      totalPrice: TicketTierPrice.total(unitPrice, row.tickets_quantity),
       status: row.status,
       createdAt: row.created_at,
       expiresAt: row.expires_at,
