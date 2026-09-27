@@ -55,6 +55,17 @@ export class PostgresReservationImplRepo implements ReservationRepository {
     });
   }
 
+  // Status sync only: availability and domain rules already treat lapsed holds as expired.
+  // Rows locked by a concurrent confirm/cancel are re-checked after the lock is released.
+  expireLapsedHolds(now: Date): Promise<number> {
+    return this.prisma.$executeRaw`
+      UPDATE reservations
+      SET status = 'expired', updated_at = ${now}::timestamptz
+      WHERE status = 'on-hold'
+        AND expires_at <= ${now}::timestamptz
+    `;
+  }
+
   private async upsert(db: Db, reservation: Reservation): Promise<void> {
     const data = ReservationMapper.toPersistence(reservation);
     await db.reservation.upsert({
@@ -77,7 +88,7 @@ export class PostgresReservationImplRepo implements ReservationRepository {
           status = 'confirmed'
           OR (
             status = 'on-hold'
-            AND created_at > ${now}::timestamptz - make_interval(mins => ${Reservation.HOLD_MINUTES}::int)
+            AND expires_at > ${now}::timestamptz
           )
         )
     `;

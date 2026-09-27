@@ -3,7 +3,7 @@ import { ReservationId, TicketTierId } from './values';
 
 // Operations available while holding a ticket tier lock; all run in the lock's transaction.
 export interface LockedTierReservations {
-  // Sum of tickets held by confirmed and still-active (within HOLD_MINUTES of now) on-hold reservations.
+  // Sum of tickets held by confirmed and still-active (expires_at after now) on-hold reservations.
   sumTakenTickets(now: Date): Promise<number>;
   save(reservation: Reservation): Promise<void>;
 }
@@ -27,4 +27,6 @@ export abstract class ReservationRepository {
     id: ReservationId,
     work: (locked: LockedReservation) => Promise<T>,
   ): Promise<T>;
+  // Persists 'expired' on holds whose window has lapsed; returns how many were updated.
+  abstract expireLapsedHolds(now: Date): Promise<number>;
 }

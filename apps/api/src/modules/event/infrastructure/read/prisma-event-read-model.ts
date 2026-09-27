@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Reservation } from '@modules/reservation/domain';
 import { Prisma, PostgresService } from '@shared/infrastructure/database';
 import { EventReadModel, EventView } from '../../application/read-models';
 
@@ -52,7 +51,7 @@ export class PrismaEventReadModel implements EventReadModel {
         WHERE status = 'confirmed'
            OR (
              status = 'on-hold'
-             AND created_at > ${now}::timestamptz - make_interval(mins => ${Reservation.HOLD_MINUTES}::int)
+             AND expires_at > ${now}::timestamptz
            )
         GROUP BY ticket_tier_id
       ) r ON r.ticket_tier_id = t.id

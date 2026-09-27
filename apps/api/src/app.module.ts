@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 import { allConfigs } from '@shared/infrastructure/config';
 import { ClockModule } from '@shared/infrastructure/clock';
 import { DatabaseModule } from '@shared/infrastructure/database';
@@ -13,6 +14,7 @@ import { ReservationModule } from '@modules/reservation/reservation.module';
       isGlobal: true,
       load: [...allConfigs],
     }),
+    ScheduleModule.forRoot(),
     DatabaseModule,
     ClockModule,
     HttpExceptionsModule,

@@ -29,6 +29,7 @@ type HydrateReservation = {
   ticketTierId: TicketTierId;
   ticketsQuantity: TicketsQuantity;
   status: ReservationStatus;
+  expiresAt: Date;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -43,16 +44,11 @@ export class Reservation extends AggregateRoot<ReservationId> {
     public ticketTierId: TicketTierId,
     public ticketsQuantity: TicketsQuantity,
     public status: ReservationStatus,
+    public readonly expiresAt: Date,
     public createdAt: Date,
     public updatedAt: Date,
   ) {
     super(id);
-  }
-
-  get expiresAt(): Date {
-    return new Date(
-      this.createdAt.getTime() + Reservation.HOLD_MINUTES * 60_000,
-    );
   }
 
   isExpired(now: Date): boolean {
@@ -73,7 +69,6 @@ export class Reservation extends AggregateRoot<ReservationId> {
     this.record({ type: 'ReservationConfirmed', occurredAt: now });
   }
 
-  // Only an active (non-expired) hold can be cancelled.
   cancel(now: Date): void {
     if (this.status === 'confirmed')
       throw new ReservationAlreadyConfirmedException();
@@ -95,6 +90,7 @@ export class Reservation extends AggregateRoot<ReservationId> {
       input.ticketTierId,
       input.ticketsQuantity,
       input.status ?? ReservationStatus.default(),
+      new Date(now.getTime() + Reservation.HOLD_MINUTES * 60_000),
       now,
       now,
     );
@@ -111,6 +107,7 @@ export class Reservation extends AggregateRoot<ReservationId> {
       input.ticketTierId,
       input.ticketsQuantity,
       input.status,
+      input.expiresAt,
       input.createdAt,
       input.updatedAt,
     );

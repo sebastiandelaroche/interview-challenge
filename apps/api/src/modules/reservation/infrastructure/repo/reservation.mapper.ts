@@ -45,6 +45,7 @@ export const ReservationMapper = {
       ticketTierId: row.ticketTierId as TicketTierId,
       ticketsQuantity: row.ticketsQuantity as TicketsQuantity,
       status: TO_DOMAIN_STATUS[row.status] as ReservationStatus,
+      expiresAt: row.expiresAt,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
     });
@@ -64,6 +65,7 @@ export const ReservationMapper = {
       customerEmail: reservation.customerEmail,
       ticketsQuantity: reservation.ticketsQuantity,
       status: ReservationMapper.toStatus(reservation.status),
+      expiresAt: reservation.expiresAt,
       createdAt: reservation.createdAt,
       updatedAt: reservation.updatedAt,
     };

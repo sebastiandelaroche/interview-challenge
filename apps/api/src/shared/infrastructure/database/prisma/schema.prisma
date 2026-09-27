@@ -58,11 +58,13 @@ model Reservation {
   customerEmail    String            @map("customer_email") @db.VarChar(254)
   ticketsQuantity  Int               @map("tickets_quantity")
   status           ReservationStatus @default(ON_HOLD)
+  expiresAt        DateTime          @map("expires_at") @db.Timestamptz(3)
   createdAt        DateTime          @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt        DateTime          @updatedAt @map("updated_at") @db.Timestamptz(3)
   ticketTier       TicketTier        @relation(fields: [ticketTierId], references: [id], onDelete: Restrict)
 
   @@index([ticketTierId, status])
+  @@index([status, expiresAt])
   @@index([customerEmail])
   @@map("reservations")
 }

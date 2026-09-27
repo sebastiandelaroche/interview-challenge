@@ -10,7 +10,9 @@ import {
   CancelReservationUseCase,
   ConfirmReservationUseCase,
   CreateReservationUseCase,
+  ExpireReservationsUseCase,
 } from './application/use-cases';
+import { ExpireReservationsCron } from './presentation/schedule/expire-reservations.cron';
 
 @Module({
   imports: [EventModule],
@@ -21,6 +23,8 @@ import {
     CreateReservationUseCase,
     ConfirmReservationUseCase,
     CancelReservationUseCase,
+    ExpireReservationsUseCase,
+    ExpireReservationsCron,
   ],
   exports: [],
 })
