@@ -16,17 +16,19 @@ export interface LockedReservation {
 
 export abstract class ReservationRepository {
   abstract findById(id: ReservationId): Promise<Reservation | null>;
-  abstract save(reservation: Reservation): Promise<void>;
+
   // Serializes concurrent reservations for the same tier until work completes.
   abstract withTicketTierLock<T>(
     ticketTierId: TicketTierId,
     work: (locked: LockedTierReservations) => Promise<T>,
   ): Promise<T>;
+
   // Serializes concurrent changes to the same reservation; if work throws, the transaction rolls back.
   abstract withReservationLock<T>(
     id: ReservationId,
     work: (locked: LockedReservation) => Promise<T>,
   ): Promise<T>;
+
   // Persists 'expired' on holds whose window has lapsed; returns how many were updated.
   abstract expireLapsedHolds(now: Date): Promise<number>;
 }

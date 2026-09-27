@@ -21,10 +21,6 @@ export class PostgresReservationImplRepo implements ReservationRepository {
     return row ? ReservationMapper.toDomain(row) : null;
   }
 
-  save(reservation: Reservation): Promise<void> {
-    return this.upsert(this.prisma, reservation);
-  }
-
   withTicketTierLock<T>(
     ticketTierId: TicketTierId,
     work: (locked: LockedTierReservations) => Promise<T>,
@@ -61,8 +57,7 @@ export class PostgresReservationImplRepo implements ReservationRepository {
     return this.prisma.$executeRaw`
       UPDATE reservations
       SET status = 'expired', updated_at = ${now}::timestamptz
-      WHERE status = 'on-hold'
-        AND expires_at <= ${now}::timestamptz
+      WHERE status = 'on-hold' AND expires_at <= ${now}::timestamptz
     `;
   }
 
@@ -86,10 +81,7 @@ export class PostgresReservationImplRepo implements ReservationRepository {
       WHERE ticket_tier_id = ${ticketTierId}::uuid
         AND (
           status = 'confirmed'
-          OR (
-            status = 'on-hold'
-            AND expires_at > ${now}::timestamptz
-          )
+          OR (status = 'on-hold' AND expires_at > ${now}::timestamptz)
         )
     `;
     return taken;
