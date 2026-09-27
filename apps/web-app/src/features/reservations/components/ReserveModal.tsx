@@ -81,6 +81,7 @@ export function ReserveModal({ eventId, tier, onClose, onConflict }: Props) {
       <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
         <Form.Item
           label="Quantity"
+          htmlFor="ticketsQuantity"
           validateStatus={errors.ticketsQuantity ? "error" : undefined}
           help={errors.ticketsQuantity?.message}
         >
@@ -90,6 +91,7 @@ export function ReserveModal({ eventId, tier, onClose, onConflict }: Props) {
             render={({ field }) => (
               <InputNumber
                 {...field}
+                id="ticketsQuantity"
                 min={1}
                 precision={0}
                 style={{ width: "100%" }}
@@ -100,17 +102,21 @@ export function ReserveModal({ eventId, tier, onClose, onConflict }: Props) {
         </Form.Item>
         <Form.Item
           label="Full name"
+          htmlFor="customerFullName"
           validateStatus={errors.customerFullName ? "error" : undefined}
           help={errors.customerFullName?.message}
         >
           <Controller
             name="customerFullName"
             control={control}
-            render={({ field }) => <Input {...field} autoComplete="name" />}
+            render={({ field }) => (
+              <Input {...field} id="customerFullName" autoComplete="name" />
+            )}
           />
         </Form.Item>
         <Form.Item
           label="Email"
+          htmlFor="customerEmail"
           validateStatus={errors.customerEmail ? "error" : undefined}
           help={errors.customerEmail?.message}
         >
@@ -118,7 +124,12 @@ export function ReserveModal({ eventId, tier, onClose, onConflict }: Props) {
             name="customerEmail"
             control={control}
             render={({ field }) => (
-              <Input {...field} type="email" autoComplete="email" />
+              <Input
+                {...field}
+                id="customerEmail"
+                type="email"
+                autoComplete="email"
+              />
             )}
           />
         </Form.Item>

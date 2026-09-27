@@ -1,8 +1,8 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, type RouteObject } from "react-router";
 import { AppLayout } from "./layout/AppLayout";
 import { NotFound } from "../shared/ui/NotFound";
 
-export const router = createBrowserRouter([
+export const routes: RouteObject[] = [
   {
     element: <AppLayout />,
     children: [
@@ -30,4 +30,6 @@ export const router = createBrowserRouter([
       { path: "*", element: <NotFound /> },
     ],
   },
-]);
+];
+
+export const router = createBrowserRouter(routes);
