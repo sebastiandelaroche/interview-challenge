@@ -20,3 +20,7 @@ export function getErrorMessage(
   }
   return error.message ?? fallback;
 }
+
+export function isGone(error: ApiError): boolean {
+  return !!error && "status" in error && error.status === 410;
+}
