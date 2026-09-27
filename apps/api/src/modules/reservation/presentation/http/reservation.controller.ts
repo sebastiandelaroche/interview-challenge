@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
   Param,
@@ -14,6 +15,7 @@ import {
   ConfirmReservationUseCase,
   CreateReservationUseCase,
 } from '../../application/use-cases';
+import { GetReservationQuery } from '../../application/queries';
 import { CreateReservationRequest } from './dto/create-reservation.request';
 import {
   CancelReservationResponse,
@@ -29,7 +31,21 @@ export class ReservationController {
     private readonly createReservation: CreateReservationUseCase,
     private readonly confirmReservation: ConfirmReservationUseCase,
     private readonly cancelReservation: CancelReservationUseCase,
+    private readonly getReservation: GetReservationQuery,
   ) {}
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get a reservation with its event and tier' })
+  @ApiResponse({ status: HttpStatus.OK, type: ReservationResponse })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Reservation not found',
+  })
+  findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<ReservationResponse> {
+    return this.getReservation.execute({ id });
+  }
 
   @Post()
   @ApiOperation({ summary: 'Create a temporary hold on tickets' })

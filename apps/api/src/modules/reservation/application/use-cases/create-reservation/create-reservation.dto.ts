@@ -1,5 +1,6 @@
 import { Event, TicketTier } from '@modules/event/domain';
 import { Reservation } from '@modules/reservation/domain';
+import { ReservationView } from '../../read-models';
 
 export type CreateReservationInput = {
   eventId: string;
@@ -9,24 +10,7 @@ export type CreateReservationInput = {
   customerEmail: string;
 };
 
-export type CreateReservationOutput = {
-  id: string;
-  eventId: string;
-  tier: {
-    id: string;
-    name: string;
-    unitPrice: number;
-  };
-  ticketsQuantity: number;
-  totalPrice: number;
-  customer: {
-    fullName: string;
-    email: string;
-  };
-  status: string;
-  createdAt: Date;
-  expiresAt: Date;
-};
+export type CreateReservationOutput = ReservationView;
 
 export const toCreateReservationOutput = (
   event: Event,
@@ -35,7 +19,10 @@ export const toCreateReservationOutput = (
 ): CreateReservationOutput => {
   return {
     id: reservation.id,
-    eventId: event.id,
+    event: {
+      id: event.id,
+      name: event.name,
+    },
     tier: {
       id: tier.id,
       name: tier.name,

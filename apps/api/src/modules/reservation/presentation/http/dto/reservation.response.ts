@@ -32,20 +32,11 @@ export class ReservationResponse {
   @ApiProperty({ format: 'uuid' })
   id: string;
 
-  @ApiProperty({ format: 'uuid' })
-  eventId: string;
-
-  @ApiProperty({ type: ReservationTierResponse })
-  tier: ReservationTierResponse;
-
   @ApiProperty({ example: 2 })
   ticketsQuantity: number;
 
   @ApiProperty({ example: 300.0 })
   totalPrice: number;
-
-  @ApiProperty({ type: CustomerResponse })
-  customer: CustomerResponse;
 
   @ApiProperty({ enum: RESERVATION_STATUSES, example: 'on-hold' })
   status: string;
@@ -55,6 +46,15 @@ export class ReservationResponse {
 
   @ApiProperty({ type: String, format: 'date-time' })
   expiresAt: Date;
+
+  @ApiProperty({ type: ReservationEventResponse })
+  event: ReservationEventResponse;
+
+  @ApiProperty({ type: ReservationTierResponse })
+  tier: ReservationTierResponse;
+
+  @ApiProperty({ type: CustomerResponse })
+  customer: CustomerResponse;
 }
 
 export class OrderResponse {

@@ -12,6 +12,9 @@ import {
   CreateReservationUseCase,
   ExpireReservationsUseCase,
 } from './application/use-cases';
+import { GetReservationQuery } from './application/queries';
+import { ReservationReadModel } from './application/read-models';
+import { PostgresReservationReadModel } from './infrastructure/read/postgres-reservation-read-model';
 import { ExpireReservationsCron } from './presentation/schedule/expire-reservations.cron';
 
 @Module({
@@ -20,10 +23,12 @@ import { ExpireReservationsCron } from './presentation/schedule/expire-reservati
   providers: [
     { provide: ReservationRepository, useClass: PostgresReservationImplRepo },
     { provide: OrderRepository, useClass: MongoOrderImplRepo },
+    { provide: ReservationReadModel, useClass: PostgresReservationReadModel },
     CreateReservationUseCase,
     ConfirmReservationUseCase,
     CancelReservationUseCase,
     ExpireReservationsUseCase,
+    GetReservationQuery,
     ExpireReservationsCron,
   ],
   exports: [],

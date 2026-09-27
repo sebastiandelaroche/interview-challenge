@@ -2,11 +2,12 @@ export type ReservationStatus =
   "on-hold" | "confirmed" | "expired" | "cancelled";
 
 export type Customer = { fullName: string; email: string };
+export type ReservationEvent = { id: string; name: string };
 export type ReservationTier = { id: string; name: string; unitPrice: number };
 
 export type Reservation = {
   id: string;
-  eventId: string;
+  event: ReservationEvent;
   tier: ReservationTier;
   ticketsQuantity: number;
   totalPrice: number;
@@ -19,7 +20,7 @@ export type Reservation = {
 export type Order = {
   id: string;
   reservationId: string;
-  event: { id: string; name: string };
+  event: ReservationEvent;
   tier: ReservationTier;
   ticketsQuantity: number;
   totalPrice: number;

@@ -4,7 +4,7 @@ import { EventReadModel, EventView } from '../../application/read-models';
 import { EventTierRow, EventViewMapper } from './event-view.mapper';
 
 @Injectable()
-export class PrismaEventReadModel implements EventReadModel {
+export class PostgresEventReadModel implements EventReadModel {
   constructor(private readonly prisma: PostgresService) {}
 
   async findAll(now: Date): Promise<EventView[]> {
