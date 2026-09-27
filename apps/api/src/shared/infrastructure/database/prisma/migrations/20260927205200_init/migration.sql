@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "reservation_status" AS ENUM ('on-hold', 'reserved', 'expired');
+CREATE TYPE "reservation_status" AS ENUM ('on-hold', 'confirmed', 'expired', 'cancelled');
 
 -- CreateTable
 CREATE TABLE "events" (
@@ -35,6 +35,7 @@ CREATE TABLE "reservations" (
     "customer_email" VARCHAR(254) NOT NULL,
     "tickets_quantity" INTEGER NOT NULL,
     "status" "reservation_status" NOT NULL DEFAULT 'on-hold',
+    "expires_at" TIMESTAMPTZ(3) NOT NULL,
     "created_at" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(3) NOT NULL,
 
@@ -52,6 +53,9 @@ CREATE UNIQUE INDEX "ticket_tiers_event_id_name_key" ON "ticket_tiers"("event_id
 
 -- CreateIndex
 CREATE INDEX "reservations_ticket_tier_id_status_idx" ON "reservations"("ticket_tier_id", "status");
+
+-- CreateIndex
+CREATE INDEX "reservations_status_expires_at_idx" ON "reservations"("status", "expires_at");
 
 -- CreateIndex
 CREATE INDEX "reservations_customer_email_idx" ON "reservations"("customer_email");

@@ -10,7 +10,7 @@ async function bootstrap() {
   configureApp(app);
 
   const configService = app.get(ConfigService);
-  const PORT = configService.get<number>('app.port', 3001);
+  const PORT = configService.get<number>('app.port', 3000);
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Interview Challenge')
